@@ -7,10 +7,13 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "react-devtools": "react-devtools"
   },
   "dependencies": {
+    "buffer": "^5.4.3",
     "react": "16.9.0",
+    "react-devtools": "^3.6.3",
     "react-native": "0.61.5"
   },
   "devDependencies": {
