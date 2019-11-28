@@ -1,3 +1,5 @@
+'use strict';
+
 import React, {Component} from 'react';
 import {
   Text,
@@ -92,6 +94,7 @@ export default class Login extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    justifyContent: 'center',
     backgroundColor: '#F5FCFF',
     flex: 1,
     paddingTop: 40,
