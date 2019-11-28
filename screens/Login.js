@@ -1,7 +1,22 @@
 import React, {Component} from 'react';
-import {Text, StyleSheet, View, Image, TextInput, TouchableHighlight} from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  View,
+  Image,
+  TextInput,
+  TouchableHighlight,
+  ActivityIndicator,
+} from 'react-native';
 
 export default class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showProgress: false,
+    };
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -10,17 +25,30 @@ export default class Login extends Component {
           source={require('../assets/images/Octocat.png')}
         />
         <Text style={styles.heading}>Github browser</Text>
-        <TextInput style={styles.input} placeholder="Github username" />
         <TextInput
+          onChangeText={text => this.setState({username: text})}
+          style={styles.input}
+          placeholder="Github username"
+        />
+        <TextInput
+          onChangeText={text => this.setState({password: text})}
           style={styles.input}
           placeholder="Github password"
-          secureTextEntry="true"
+          secureTextEntry={true}
         />
-        <TouchableHighlight style={styles.button}>
+        <TouchableHighlight
+          onPress={this.onLoginPressed.bind(this)}
+          style={styles.button}>
           <Text style={styles.buttonText}>Log in</Text>
         </TouchableHighlight>
+        <ActivityIndicator animating={this.state.showProgress} size="large" style={styles.loader}/>
       </View>
     );
+  }
+
+  onLoginPressed() {
+    console.log('Attempting to log in with username ' + this.state.username);
+    this.setState({showProgress: true});
   }
 }
 
@@ -60,5 +88,8 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: '#FFF',
     alignSelf: 'center',
+  },
+  loader: {
+    marginTop: 20
   },
 });
