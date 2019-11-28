@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "buffer": "^5.4.3",
+    "create-react-class": "^15.6.3",
     "react": "16.9.0",
     "react-devtools": "^3.6.3",
     "react-native": "0.61.5"

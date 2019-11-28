@@ -84,6 +84,9 @@ export default class Login extends Component {
             results,
           ),
         );
+        if (results.success && this.props.onLogin) {
+          this.props.onLogin();
+        }
       },
     );
   };
