@@ -9,8 +9,6 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import Buffer from 'buffer';
-
 import {authService} from '../services/AuthService';
 
 export default class Login extends Component {

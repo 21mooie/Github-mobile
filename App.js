@@ -14,6 +14,7 @@ import {
   View,
   Text,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 
 import {
@@ -25,6 +26,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import Login from './screens/Login';
+import {authService} from './services/AuthService';
 
 var createReactClass = require('create-react-class');
 
@@ -32,16 +34,36 @@ var App = createReactClass({
   getInitialState: function() {
     return {
       isLoggedIn: false,
+      checkingAuth: true,
     };
   },
 
+  componentDidMount: function() {
+    // eslint-disable-next-line handle-callback-err
+    authService.getAuthInfo((err, authInfo) => {
+      this.setState({
+        checkingAuth: false,
+        isLoggedIn: authInfo != null,
+      });
+    });
+  },
+
   render: function() {
+    if (this.state.checkingAuth) {
+      return (
+        <ActivityIndicator
+          animating={true}
+          size="large"
+          style={styles.loader}
+        />
+      );
+    }
     if (!this.state.isLoggedIn) {
       return <Login onLogin={this.onLoginMain} />;
     } else {
       return (
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}> Welcome </Text>
+        <View style={styles.container}>
+          <Text style={styles.welcome}> Welcome </Text>
         </View>
       );
     }
@@ -54,41 +76,21 @@ var App = createReactClass({
 });
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+  welcome: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
   },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+  instructions: {
+    textAlign: 'center',
+    color: '#333333',
+    marginBottom: 5,
   },
 });
 
