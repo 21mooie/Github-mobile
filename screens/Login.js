@@ -20,6 +20,20 @@ export default class Login extends Component {
   }
 
   render() {
+    let errorCtrl = <View />;
+    if (!this.state.success && this.state.badCredentials) {
+      errorCtrl = (
+        <Text style={styles.error}>
+          That username and password combination did not work
+        </Text>
+      );
+    }
+
+    if (!this.state.success && this.state.unknownError) {
+      errorCtrl = (
+        <Text style={styles.error}>We experienced an unexpected issue</Text>
+      );
+    }
     return (
       <View style={styles.container}>
         <Image
@@ -41,6 +55,7 @@ export default class Login extends Component {
         <TouchableHighlight onPress={this.onLoginPressed} style={styles.button}>
           <Text style={styles.buttonText}>Log in</Text>
         </TouchableHighlight>
+        {errorCtrl}
         <ActivityIndicator
           animating={this.state.showProgress}
           size="large"
@@ -81,6 +96,7 @@ export default class Login extends Component {
       })
       .then(results => {
         console.log(results);
+        this.setState({success: true});
       })
       .catch(err => {
         console.log('login failed: ' + err);
@@ -132,4 +148,8 @@ const styles = StyleSheet.create({
   loader: {
     marginTop: 20,
   },
+  error: {
+    color: 'red',
+    paddingTop: 10
+  }
 });
