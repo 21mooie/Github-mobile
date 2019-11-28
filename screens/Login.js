@@ -36,20 +36,30 @@ export default class Login extends Component {
           placeholder="Github password"
           secureTextEntry={true}
         />
-        <TouchableHighlight
-          onPress={this.onLoginPressed.bind(this)}
-          style={styles.button}>
+        <TouchableHighlight onPress={this.onLoginPressed} style={styles.button}>
           <Text style={styles.buttonText}>Log in</Text>
         </TouchableHighlight>
-        <ActivityIndicator animating={this.state.showProgress} size="large" style={styles.loader}/>
+        <ActivityIndicator
+          animating={this.state.showProgress}
+          size="large"
+          style={styles.loader}
+        />
       </View>
     );
   }
 
-  onLoginPressed() {
+  onLoginPressed = () => {
     console.log('Attempting to log in with username ' + this.state.username);
     this.setState({showProgress: true});
-  }
+    fetch('https://api.github.com/search/repositories?q=react')
+      .then(response => {
+        return response.json();
+      })
+      .then(results => {
+        console.log(results);
+        this.setState({showProgress: false});
+      });
+  };
 }
 
 const styles = StyleSheet.create({
@@ -90,6 +100,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   loader: {
-    marginTop: 20
+    marginTop: 20,
   },
 });
