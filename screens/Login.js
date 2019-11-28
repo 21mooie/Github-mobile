@@ -11,6 +11,8 @@ import {
 
 import Buffer from 'buffer';
 
+import {authService} from '../services/AuthService';
+
 export default class Login extends Component {
   constructor(props) {
     super(props);
@@ -68,43 +70,22 @@ export default class Login extends Component {
   onLoginPressed = () => {
     console.log('Attempting to log in with username ' + this.state.username);
     this.setState({showProgress: true});
-
-    const buffer = new Buffer.Buffer(
-      this.state.username + ':' + this.state.password,
-    );
-    const encodedAuth = buffer.toString('base64');
-
-    fetch('https://api.github.com/user', {
-      headers: {
-        Authorization: 'Basic ' + encodedAuth,
+    authService.login(
+      {
+        username: this.state.username,
+        password: this.state.password,
       },
-    })
-      .then(response => {
-        if (response.status >= 200 && response.status < 300) {
-          return response;
-        }
-        if (response.status === 401) {
-          throw {
-            badCredentials: response.status === 401,
-            unknownError: response.status !== 401,
-          };
-        }
-        throw 'Unknown error';
-      })
-      .then(response => {
-        return response.json();
-      })
-      .then(results => {
-        console.log(results);
-        this.setState({success: true});
-      })
-      .catch(err => {
-        console.log('login failed: ' + err);
-        this.setState(err);
-      })
-      .finally(() => {
-        this.setState({showProgress: false});
-      });
+      results => {
+        this.setState(
+          Object.assign(
+            {
+              showProgress: false,
+            },
+            results,
+          ),
+        );
+      },
+    );
   };
 }
 
@@ -150,6 +131,6 @@ const styles = StyleSheet.create({
   },
   error: {
     color: 'red',
-    paddingTop: 10
-  }
+    paddingTop: 10,
+  },
 });
